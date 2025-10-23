@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - InnerWork{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="mb-2">Welcome back, {{ current_user.name }}!</h1>
+            <p class="text-muted">Continue your journey to wellness</p>
+        </div>
+    </div>
+
+    {% if modules %}
+    <div class="row mb-4">
+        <div class="col">
+            <h3 class="mb-3">Your Modules</h3>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        {% for module in modules %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ module.title }}</h5>
+                    <p class="card-text">{{ module.description[:100] }}...</p>
+                    
+                    {% if progress_map.get(module.id) %}
+                    <div class="mb-3">
+                        <span class="badge bg-success">Completed</span>
+                        <span class="text-muted">Score: {{ progress_map[module.id].score }}%</span>
+                    </div>
+                    <a href="{{ url_for('modules.download_certificate', module_id=module.id) }}" 
+                       class="btn btn-outline-primary btn-sm me-2">
+                        Download Certificate
+                    </a>
+                    {% else %}
+                    <span class="badge bg-warning text-dark mb-3">In Progress</span>
+                    {% endif %}
+                    
+                    <a href="{{ url_for('modules.view_module', module_id=module.id) }}" 
+                       class="btn btn-primary btn-sm">
+                        Continue Learning
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow-sm text-center p-5">
+                <h3 class="mb-3">No Modules Yet</h3>
+                <p class="mb-4">You haven't enrolled in any modules. Start your journey by browsing available courses.</p>
+                <a href="{{ url_for('modules.list_modules') }}" class="btn btn-primary">Browse Modules</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Need Support?</h5>
+                    <p class="card-text">Chat with Virtual Debbie for guidance and encouragement.</p>
+                    <a href="{{ url_for('chatbot.chatbot_page') }}" class="btn btn-outline-primary">
+                        Start Chatting
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Explore More Modules</h5>
+                    <p class="card-text">Discover new courses to continue your growth journey.</p>
+                    <a href="{{ url_for('modules.list_modules') }}" class="btn btn-outline-primary">
+                        Browse All Modules
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

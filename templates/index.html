@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}InnerWork - Self-Paced Therapy & Psychoeducation{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Welcome to InnerWork</h1>
+                <p class="lead mb-4">
+                    Your personal companion for self-paced therapy and psychoeducation. 
+                    Begin your journey of self-discovery and healing with Debbie Green, MA, PSC.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Get Started</a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">Sign In</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="{{ url_for('static', filename='images/hero-placeholder.svg') }}" 
+                     alt="Wellness Journey" 
+                     class="img-fluid rounded"
+                     onerror="this.style.display='none'">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">What You'll Experience</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">📚</div>
+                        <h4>Self-Paced Modules</h4>
+                        <p>Learn at your own pace with video lessons and interactive quizzes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">💬</div>
+                        <h4>Virtual Therapist</h4>
+                        <p>Chat with your AI companion for support and guidance anytime</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">🎓</div>
+                        <h4>Earn Certificates</h4>
+                        <p>Complete modules and receive certificates of achievement</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cta-section py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to Begin Your Journey?</h2>
+        <p class="lead mb-4">Join InnerWork today and start your path to wellness</p>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Create Your Account</a>
+    </div>
+</div>
+{% endblock %}

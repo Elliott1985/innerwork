@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Virtual Therapist - InnerWork{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="mb-4">Chat with Virtual Debbie</h1>
+            <p class="text-muted mb-4">Your supportive companion for guidance and encouragement</p>
+            
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <!-- Chat History Container -->
+                    <div id="chatHistory" class="chat-history p-4" style="height: 500px; overflow-y: auto;">
+                        {% if chat_history %}
+                            {% for chat in chat_history %}
+                            <div class="message user-message mb-3">
+                                <div class="message-bubble user">
+                                    <strong>You:</strong> {{ chat.message }}
+                                </div>
+                                <small class="text-muted">{{ chat.timestamp.strftime('%I:%M %p') }}</small>
+                            </div>
+                            <div class="message bot-message mb-3">
+                                <div class="message-bubble bot">
+                                    <strong>Virtual Debbie:</strong> {{ chat.response }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                        <div class="text-center text-muted py-5">
+                            <p>Start a conversation with Virtual Debbie</p>
+                            <p class="small">Share what's on your mind...</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Chat Input -->
+                    <div class="chat-input p-3 border-top">
+                        <form id="chatForm" class="d-flex gap-2">
+                            <input type="text" 
+                                   id="messageInput" 
+                                   class="form-control" 
+                                   placeholder="Type your message here..."
+                                   required>
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info mt-3">
+                <strong>Note:</strong> Virtual Debbie is an AI companion. For urgent concerns, please contact a licensed professional.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+{% endblock %}

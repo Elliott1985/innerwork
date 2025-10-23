@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - InnerWork{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <h1 class="mb-4">Complete Your Purchase</h1>
+            
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">{{ module.title }}</h4>
+                    <p class="card-text">{{ module.description }}</p>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="h5 mb-0">Total:</span>
+                        <span class="h4 mb-0 text-primary">$29.99</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="mb-3">Payment Information</h5>
+                    <p class="text-muted small mb-4">
+                        <strong>Development Mode:</strong> Click the button below to simulate a purchase. 
+                        In production, this will use Stripe for secure payments.
+                    </p>
+                    
+                    <button id="checkoutButton" class="btn btn-primary btn-lg w-100">
+                        Complete Purchase (Test Mode)
+                    </button>
+                </div>
+            </div>
+            
+            <div class="text-center mt-3">
+                <a href="{{ url_for('modules.list_modules') }}" class="text-muted">
+                    ← Back to Modules
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('checkoutButton').addEventListener('click', function() {
+    fetch('{{ url_for("payments.create_checkout_session", module_id=module.id) }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.redirect) {
+            window.location.href = data.redirect;
+        } else if (data.error) {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    });
+});
+</script>
+{% endblock %}

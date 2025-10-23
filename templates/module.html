@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if module %}{{ module.title }} - InnerWork{% else %}Modules - InnerWork{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    {% if module %}
+    <!-- Single Module View -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="mb-4">{{ module.title }}</h1>
+            <p class="lead">{{ module.description }}</p>
+            
+            {% if progress %}
+            <div class="alert alert-success mb-4">
+                <strong>Completed!</strong> Your score: {{ progress.score }}%
+                <a href="{{ url_for('modules.download_certificate', module_id=module.id) }}" 
+                   class="btn btn-sm btn-success ms-3">
+                    Download Certificate
+                </a>
+            </div>
+            {% endif %}
+            
+            {% if module.video_url %}
+            <div class="video-container mb-4">
+                <h3>Module Video</h3>
+                <div class="ratio ratio-16x9">
+                    <iframe src="{{ module.video_url }}" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if quiz_questions %}
+            <div class="quiz-section mt-5">
+                <h3 class="mb-4">Module Quiz</h3>
+                <form method="POST" action="{{ url_for('modules.submit_quiz', module_id=module.id) }}">
+                    {% for i, question in enumerate(quiz_questions) %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Question {{ i + 1 }}</h5>
+                            <p class="card-text">{{ question.question }}</p>
+                            
+                            {% for option in question.options %}
+                            <div class="form-check">
+                                <input class="form-check-input" 
+                                       type="radio" 
+                                       name="question_{{ i }}" 
+                                       id="q{{ i }}_option{{ loop.index }}"
+                                       value="{{ option }}"
+                                       required>
+                                <label class="form-check-label" for="q{{ i }}_option{{ loop.index }}">
+                                    {{ option }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Submit Quiz</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% else %}
+    <!-- Module List View -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1>Available Modules</h1>
+            <p class="text-muted">Choose a module to begin your learning journey</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        {% for mod in modules %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ mod.title }}</h5>
+                    <p class="card-text">{{ mod.description[:150] }}...</p>
+                    
+                    {% if mod.id in purchased_ids %}
+                    <span class="badge bg-success mb-2">Purchased</span>
+                    <br>
+                    <a href="{{ url_for('modules.view_module', module_id=mod.id) }}" 
+                       class="btn btn-primary">
+                        View Module
+                    </a>
+                    {% else %}
+                    <span class="badge bg-warning text-dark mb-2">Not Purchased</span>
+                    <br>
+                    <a href="{{ url_for('payments.checkout', module_id=mod.id) }}" 
+                       class="btn btn-outline-primary">
+                        Purchase Now
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
