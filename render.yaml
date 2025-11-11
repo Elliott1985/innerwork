@@ -43,16 +43,17 @@ services:
       - key: MAIL_DEFAULT_SENDER
         sync: false
 
-  # PostgreSQL Database
+  # Redis Instance
+  - type: redis
+    name: innerwork-redis
+    region: oregon
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+
+# PostgreSQL Database
 databases:
   - name: innerwork-db
     databaseName: innerwork
     user: innerwork
     region: oregon
     plan: free
-
-  # Redis Instance
-  - name: innerwork-redis
-    region: oregon
-    plan: free
-    maxmemoryPolicy: allkeys-lru
