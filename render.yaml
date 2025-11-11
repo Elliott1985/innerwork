@@ -26,20 +26,13 @@ services:
         value: gpt-4o-mini
       - key: STRIPE_SECRET_KEY
         sync: false
-      - key: STRIPE_PUBLIC_KEY
-        sync: false
-      - key: MAIL_SERVER
-        sync: false
-      - key: MAIL_PORT
-        value: "587"
-      - key: MAIL_USE_TLS
-        value: "true"
-      - key: MAIL_USERNAME
-        sync: false
-      - key: MAIL_PASSWORD
-        sync: false
-      - key: MAIL_DEFAULT_SENDER
-        sync: false
+
+  - type: redis
+    name: innerwork-redis
+    region: oregon
+    plan: free
+    ipAllowList: []
+    maxmemoryPolicy: allkeys-lru
 
 databases:
   - name: innerwork-db
@@ -48,10 +41,3 @@ databases:
     region: oregon
     plan: free
     ipAllowList: []
-
-  - name: innerwork-redis
-    type: redis
-    region: oregon
-    plan: free
-    ipAllowList: []
-    maxmemoryPolicy: allkeys-lru
