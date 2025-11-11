@@ -18,6 +18,7 @@ services:
           property: connectionString
       - key: REDIS_URL
         fromService:
+          type: redis
           name: innerwork-redis
           property: connectionString
       - key: OPENAI_API_KEY
@@ -32,12 +33,12 @@ services:
     region: oregon
     plan: free
     ipAllowList: []
-    maxmemoryPolicy: allkeys-lru
+    properties:
+      maxmemory_policy: allkeys-lru
 
 databases:
   - name: innerwork-db
-    databaseName: innerwork
-    user: innerwork
+    type: postgresql
     region: oregon
     plan: free
     ipAllowList: []
