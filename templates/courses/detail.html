@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.title }} - InnerWork{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Back Button -->
+    <a href="{{ url_for('courses.list_courses') }}" class="btn btn-sm btn-outline-secondary mb-4">
+        ← Back to Course Library
+    </a>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-5">
+                    <!-- Course Header -->
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-primary me-2">{{ course.tag }}</span>
+                            <span class="badge bg-light text-dark">{{ course.level }}</span>
+                        </div>
+                        <h1 class="display-6 fw-bold mb-3">{{ course.title }}</h1>
+                        <p class="lead text-muted">{{ course.description }}</p>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Course Details -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">What You'll Experience</h5>
+                        <ul class="list-unstyled">
+                            {% for feature in course.features %}
+                            <li class="mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill text-success me-2" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                </svg>
+                                {{ feature }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Course Info -->
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <div class="p-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-clock text-primary mb-2" viewBox="0 0 16 16">
+                                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                                </svg>
+                                <h6 class="mb-0">{{ course.duration }}</h6>
+                                <small class="text-muted">Self-paced</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-bar-chart text-primary mb-2" viewBox="0 0 16 16">
+                                    <path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z"/>
+                                </svg>
+                                <h6 class="mb-0">{{ course.level }}</h6>
+                                <small class="text-muted">Difficulty</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-infinity text-primary mb-2" viewBox="0 0 16 16">
+                                    <path d="M5.68 5.792 7.345 7.75 5.681 9.708a2.75 2.75 0 1 1 0-3.916ZM8 6.978 6.416 5.113l-.014-.015a3.75 3.75 0 1 0 0 5.304l.014-.015L8 8.522l1.584 1.865.014.015a3.75 3.75 0 1 0 0-5.304l-.014.015L8 6.978Zm.656.772 1.663-1.958a2.75 2.75 0 1 1 0 3.916L8.656 7.75Z"/>
+                                </svg>
+                                <h6 class="mb-0">Lifetime</h6>
+                                <small class="text-muted">Access</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
+                <div class="card-body p-4 text-center">
+                    <h3 class="fw-bold mb-4">{{ course.price }}</h3>
+                    
+                    {% if current_user.is_authenticated %}
+                        {% if is_purchased %}
+                            <a href="{{ url_for('lessons.show_lesson', course_id=course.id, lesson_id=1) }}" 
+                               class="btn btn-success btn-lg w-100 mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-play-circle me-2" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                                </svg>
+                                Start Lessons
+                            </a>
+                            <p class="text-success small mb-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill me-1" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                </svg>
+                                Already enrolled
+                            </p>
+                        {% else %}
+                            <button id="buyBtn" class="btn btn-primary btn-lg w-100 mb-3">
+                                Enroll Now - ${{ '%.2f' | format(course.price_cents / 100) }}
+                            </button>
+                            <p class="text-muted small mb-0">Secure Stripe checkout • Test mode</p>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('auth.register') }}" 
+                           class="btn btn-primary btn-lg w-100 mb-3">
+                            Create Account to Enroll
+                        </a>
+                        <p class="text-muted small">
+                            Already have an account? 
+                            <a href="{{ url_for('auth.login') }}">Sign in</a>
+                        </p>
+                    {% endif %}
+                    
+                    <hr class="my-4">
+                    
+                    <!-- Additional Info -->
+                    <div class="text-start">
+                        <p class="small text-muted mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-check me-2" viewBox="0 0 16 16">
+                                <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
+                                <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                            </svg>
+                            Secure payment
+                        </p>
+                        <p class="small text-muted mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-award me-2" viewBox="0 0 16 16">
+                                <path d="M9.669.864 8 0 6.331.864l-1.858.282-.842 1.68-1.337 1.32L2.6 6l-.306 1.854 1.337 1.32.842 1.68 1.858.282L8 12l1.669-.864 1.858-.282.842-1.68 1.337-1.32L13.4 6l.306-1.854-1.337-1.32-.842-1.68L9.669.864zm1.196 1.193.684 1.365 1.086 1.072L12.387 6l.248 1.506-1.086 1.072-.684 1.365-1.51.229L8 10.874l-1.355-.702-1.51-.229-.684-1.365-1.086-1.072L3.614 6l-.25-1.506 1.087-1.072.684-1.365 1.51-.229L8 1.126l1.356.702 1.509.229z"/>
+                                <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z"/>
+                            </svg>
+                            Certificate included
+                        </p>
+                        <p class="small text-muted mb-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots me-2" viewBox="0 0 16 16">
+                                <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                                <path d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z"/>
+                            </svg>
+                            Virtual Debbie support
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    }
+    
+    @media (max-width: 991px) {
+        .sticky-top {
+            position: relative !important;
+            top: 0 !important;
+            margin-top: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+{% if current_user.is_authenticated and not is_purchased %}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+const buyBtn = document.getElementById('buyBtn');
+if (buyBtn) {
+  buyBtn.addEventListener('click', async () => {
+    buyBtn.disabled = true;
+    buyBtn.textContent = 'Processing...';
+    
+    try {
+      const res = await fetch("{{ url_for('stripe.purchase_module', module_id=course.id) }}", { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = await res.json();
+      
+      if (data.test_mode && data.redirect) {
+        // Test mode - direct enrollment
+        alert('Test enrollment successful! Redirecting to dashboard...');
+        window.location.href = data.redirect;
+      } else if (data.url) {
+        // Real Stripe checkout
+        window.location.href = data.url;
+      } else {
+        alert(data.error || 'Something went wrong.');
+        buyBtn.disabled = false;
+        buyBtn.textContent = 'Enroll Now - ${{ "%.2f" | format(course.price_cents / 100) }}';
+      }
+    } catch (error) {
+      alert('Network error. Please try again.');
+      buyBtn.disabled = false;
+      buyBtn.textContent = 'Enroll Now - ${{ "%.2f" | format(course.price_cents / 100) }}';
+    }
+  });
+}
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Course Complete - InnerWork{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm text-center p-5" style="background: linear-gradient(135deg, #faf8f6 0%, #f0eae6 100%);">
+                <!-- Success Icon -->
+                <div class="mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-award text-success" viewBox="0 0 16 16">
+                        <path d="M9.669.864 8 0 6.331.864l-1.858.282-.842 1.68-1.337 1.32L2.6 6l-.306 1.854 1.337 1.32.842 1.68 1.858.282L8 12l1.669-.864 1.858-.282.842-1.68 1.337-1.32L13.4 6l.306-1.854-1.337-1.32-.842-1.68L9.669.864zm1.196 1.193.684 1.365 1.086 1.072L12.387 6l.248 1.506-1.086 1.072-.684 1.365-1.51.229L8 10.874l-1.355-.702-1.51-.229-.684-1.365-1.086-1.072L3.614 6l-.25-1.506 1.087-1.072.684-1.365 1.51-.229L8 1.126l1.356.702 1.509.229z"/>
+                        <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z"/>
+                    </svg>
+                </div>
+
+                <!-- Celebration Message -->
+                <h1 class="display-5 fw-bold mb-3" style="color: var(--primary-color);">Congratulations! 🎉</h1>
+                <h4 class="mb-4">You've Completed This Course</h4>
+                
+                <p class="lead text-muted mb-4">
+                    Take a moment to honor the work you've done. Every lesson you completed, every reflection you made, 
+                    every discomfort you sat with—these are acts of courage.
+                </p>
+
+                <div class="completion-message p-4 mb-4 text-start" style="background: white; border-radius: 12px; border-left: 4px solid var(--primary-color);">
+                    <h6 class="mb-3" style="color: var(--primary-color);">What Happens Next?</h6>
+                    <ul class="mb-0">
+                        <li class="mb-2">Your progress has been saved to your dashboard</li>
+                        <li class="mb-2">Download your certificate of completion</li>
+                        <li class="mb-2">Continue your growth with another course</li>
+                        <li class="mb-0">Chat with Virtual Debbie anytime you need support</li>
+                    </ul>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Action Buttons -->
+                <div class="d-flex flex-column flex-md-row gap-3 justify-content-center mt-4">
+                    <a href="{{ url_for('modules.dashboard') }}" class="btn btn-primary btn-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-house-door me-2" viewBox="0 0 16 16">
+                            <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+                        </svg>
+                        Return to Dashboard
+                    </a>
+                    
+                    <a href="{{ url_for('courses.list_courses') }}" class="btn btn-outline-primary btn-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-collection-play me-2" viewBox="0 0 16 16">
+                            <path d="M2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1zm2.765 5.576A.5.5 0 0 0 6 7v5a.5.5 0 0 0 .765.424l4-2.5a.5.5 0 0 0 0-.848l-4-2.5z"/>
+                            <path d="M1.5 14.5A1.5 1.5 0 0 1 0 13V6a1.5 1.5 0 0 1 1.5-1.5h13A1.5 1.5 0 0 1 16 6v7a1.5 1.5 0 0 1-1.5 1.5h-13zm13-1a.5.5 0 0 0 .5-.5V6a.5.5 0 0 0-.5-.5h-13A.5.5 0 0 0 1 6v7a.5.5 0 0 0 .5.5h13z"/>
+                        </svg>
+                        Explore More Courses
+                    </a>
+
+                    <a href="{{ url_for('chatbot.chatbot_page') }}" class="btn btn-outline-secondary btn-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-heart me-2" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z"/>
+                            <path d="M8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+                        </svg>
+                        Chat with Virtual Debbie
+                    </a>
+                </div>
+
+                <!-- Quote -->
+                <div class="mt-5 pt-4" style="border-top: 1px solid #e0e0e0;">
+                    <p class="fst-italic text-muted mb-2">
+                        "The journey of a thousand miles begins with a single step. You've taken many steps today."
+                    </p>
+                    <p class="small text-muted mb-0">— With pride and compassion, Virtual Debbie</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .completion-message ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .completion-message li::before {
+        content: "✓ ";
+        color: var(--primary-color);
+        font-weight: bold;
+        margin-right: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .d-flex.flex-md-row {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}

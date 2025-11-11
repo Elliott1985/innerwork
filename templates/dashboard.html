@@ -1,88 +1,217 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - InnerWork{% endblock %}
+{% block title %}Client Dashboard - InnerWork{% endblock %}
 
 {% block content %}
 <div class="container py-5">
-    <div class="row mb-4">
+    <!-- Welcome Header -->
+    <div class="row mb-5">
         <div class="col">
-            <h1 class="mb-2">Welcome back, {{ current_user.name }}!</h1>
-            <p class="text-muted">Continue your journey to wellness</p>
+            <div class="card border-0 shadow-sm p-4" style="background: linear-gradient(135deg, #faf8f6 0%, #f0eae6 100%);">
+                <h1 class="display-6 fw-bold mb-2">Welcome back, {{ current_user.name }}! 👋</h1>
+                <p class="lead text-muted mb-0">Continue your journey to emotional wellness and personal growth</p>
+            </div>
         </div>
     </div>
 
     {% if modules %}
+    <!-- Progress Overview -->
     <div class="row mb-4">
         <div class="col">
-            <h3 class="mb-3">Your Modules</h3>
+            <h3 class="mb-4">Your Learning Progress</h3>
         </div>
     </div>
     
-    <div class="row g-4">
+    <div class="row g-4 mb-5">
         {% for module in modules %}
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">{{ module.title }}</h5>
-                    <p class="card-text">{{ module.description[:100] }}...</p>
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0 hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title mb-0">{{ module.title }}</h5>
+                        {% if progress_map.get(module.id) %}
+                        <span class="badge bg-success">Completed</span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark">In Progress</span>
+                        {% endif %}
+                    </div>
                     
+                    <p class="card-text text-muted mb-3">{{ module.description[:120] }}...</p>
+                    
+                    <!-- Progress Bar -->
                     {% if progress_map.get(module.id) %}
                     <div class="mb-3">
-                        <span class="badge bg-success">Completed</span>
-                        <span class="text-muted">Score: {{ progress_map[module.id].score }}%</span>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <small class="text-muted">Progress</small>
+                            <small class="fw-bold text-success">{{ progress_map[module.id].score }}%</small>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-success" 
+                                 role="progressbar" 
+                                 style="width: {{ progress_map[module.id].score }}%;"
+                                 aria-valuenow="{{ progress_map[module.id].score }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                            </div>
+                        </div>
+                        <small class="text-muted">Completed on {{ progress_map[module.id].completed_date.strftime('%B %d, %Y') }}</small>
                     </div>
-                    <a href="{{ url_for('modules.download_certificate', module_id=module.id) }}" 
-                       class="btn btn-outline-primary btn-sm me-2">
-                        Download Certificate
-                    </a>
                     {% else %}
-                    <span class="badge bg-warning text-dark mb-3">In Progress</span>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <small class="text-muted">Progress</small>
+                            <small class="fw-bold text-warning">0%</small>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-warning" 
+                                 role="progressbar" 
+                                 style="width: 0%;">
+                            </div>
+                        </div>
+                        <small class="text-muted">Start your journey today</small>
+                    </div>
                     {% endif %}
                     
-                    <a href="{{ url_for('modules.view_module', module_id=module.id) }}" 
-                       class="btn btn-primary btn-sm">
-                        Continue Learning
-                    </a>
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="{{ url_for('lessons.show_lesson', course_id=module.id, lesson_id=1) }}" 
+                           class="btn btn-primary flex-grow-1">
+                            {% if progress_map.get(module.id) %}
+                            Review Lessons
+                            {% else %}
+                            Start Lessons
+                            {% endif %}
+                        </a>
+                        {% if progress_map.get(module.id) %}
+                        <a href="{{ url_for('modules.download_certificate', module_id=module.id) }}" 
+                           class="btn btn-outline-secondary"
+                           title="Download Certificate">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                            </svg>
+                        </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
     {% else %}
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <div class="card shadow-sm text-center p-5">
-                <h3 class="mb-3">No Modules Yet</h3>
-                <p class="mb-4">You haven't enrolled in any modules. Start your journey by browsing available courses.</p>
-                <a href="{{ url_for('modules.list_modules') }}" class="btn btn-primary">Browse Modules</a>
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-sm border-0 text-center p-5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-book text-muted mb-4 mx-auto" viewBox="0 0 16 16">
+                    <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                </svg>
+                <h3 class="mb-3">Begin Your Inner Journey</h3>
+                <p class="text-muted mb-4">You haven't enrolled in any courses yet. Explore our carefully curated programs designed to support your emotional wellness and personal growth.</p>
+                <div>
+                    <a href="{{ url_for('courses.list_courses') }}" class="btn btn-primary btn-lg me-2">Browse Courses</a>
+                    <a href="{{ url_for('chatbot.chatbot_page') }}" class="btn btn-outline-secondary btn-lg">Chat with Virtual Debbie</a>
+                </div>
             </div>
         </div>
     </div>
     {% endif %}
 
-    <div class="row mt-5">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Need Support?</h5>
-                    <p class="card-text">Chat with Virtual Debbie for guidance and encouragement.</p>
-                    <a href="{{ url_for('chatbot.chatbot_page') }}" class="btn btn-outline-primary">
-                        Start Chatting
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col">
+            <h4 class="mb-4">Quick Actions</h4>
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100 hover-card">
+                <div class="card-body text-center p-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-chat-heart text-primary mb-3" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z"/>
+                        <path d="M8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+                    </svg>
+                    <h5 class="card-title">Virtual Debbie</h5>
+                    <p class="card-text text-muted">Get compassionate guidance and support anytime you need it.</p>
+                    <a href="{{ url_for('chatbot.chatbot_page') }}" class="btn btn-outline-primary w-100">
+                        Start Conversation
                     </a>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Explore More Modules</h5>
-                    <p class="card-text">Discover new courses to continue your growth journey.</p>
-                    <a href="{{ url_for('modules.list_modules') }}" class="btn btn-outline-primary">
-                        Browse All Modules
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100 hover-card">
+                <div class="card-body text-center p-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-collection-play text-primary mb-3" viewBox="0 0 16 16">
+                        <path d="M2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1zm2.765 5.576A.5.5 0 0 0 6 7v5a.5.5 0 0 0 .765.424l4-2.5a.5.5 0 0 0 0-.848l-4-2.5z"/>
+                        <path d="M1.5 14.5A1.5 1.5 0 0 1 0 13V6a1.5 1.5 0 0 1 1.5-1.5h13A1.5 1.5 0 0 1 16 6v7a1.5 1.5 0 0 1-1.5 1.5h-13zm13-1a.5.5 0 0 0 .5-.5V6a.5.5 0 0 0-.5-.5h-13A.5.5 0 0 0 1 6v7a.5.5 0 0 0 .5.5h13z"/>
+                    </svg>
+                    <h5 class="card-title">Course Library</h5>
+                    <p class="card-text text-muted">Discover new self-paced programs to expand your growth journey.</p>
+                    <a href="{{ url_for('courses.list_courses') }}" class="btn btn-outline-primary w-100">
+                        Explore Courses
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100 hover-card">
+                <div class="card-body text-center p-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-calendar-check text-primary mb-3" viewBox="0 0 16 16">
+                        <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                    </svg>
+                    <h5 class="card-title">Schedule 1:1 Session</h5>
+                    <p class="card-text text-muted">Book personalized coaching with Debbie Green, MA, PSC.</p>
+                    <a href="{{ url_for('booking.book') }}" class="btn btn-outline-primary w-100">
+                        Book Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100 hover-card">
+                <div class="card-body text-center p-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-person-circle text-primary mb-3" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                    </svg>
+                    <h5 class="card-title">Account Settings</h5>
+                    <p class="card-text text-muted">Manage your profile, preferences, and subscription details.</p>
+                    <a href="#" class="btn btn-outline-primary w-100" onclick="alert('Account settings coming soon!'); return false;">
+                        View Settings
                     </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hover-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.12) !important;
+    }
+    
+    .progress {
+        border-radius: 10px;
+        background-color: #e9ecef;
+    }
+    
+    .progress-bar {
+        border-radius: 10px;
+        transition: width 0.6s ease;
+    }
+    
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+        font-weight: 500;
+    }
+</style>
 {% endblock %}

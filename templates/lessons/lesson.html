@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lesson.title }} - InnerWork{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <!-- Progress Indicator -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <a href="{{ url_for('courses.course_detail', course_id=course_id) }}" 
+                   class="btn btn-sm btn-outline-secondary">
+                    ← Back to Course
+                </a>
+                <span class="badge bg-light text-dark">
+                    Lesson {{ current_lesson_num }} of {{ total_lessons }}
+                </span>
+            </div>
+            <div class="progress" style="height: 6px;">
+                <div class="progress-bar" 
+                     role="progressbar" 
+                     style="width: {{ (current_lesson_num / total_lessons * 100)|int }}%; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));"
+                     aria-valuenow="{{ current_lesson_num }}" 
+                     aria-valuemin="0" 
+                     aria-valuemax="{{ total_lessons }}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Lesson Content -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-5">
+                    <!-- Lesson Header -->
+                    <h2 class="mb-4" style="color: var(--text-dark);">{{ lesson.title }}</h2>
+                    
+                    <!-- Lesson Content -->
+                    <div class="lesson-content">
+                        {{ lesson.content|replace('\n', '<br>')|safe }}
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Reflection Prompt -->
+                    <div class="reflection-box p-4 mb-4" style="background: linear-gradient(135deg, #faf8f6 0%, #f0eae6 100%); border-radius: 12px;">
+                        <h6 class="mb-2" style="color: var(--primary-color);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lightbulb me-2" viewBox="0 0 16 16">
+                                <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/>
+                            </svg>
+                            Pause & Reflect
+                        </h6>
+                        <p class="mb-0 small text-muted">
+                            Take a moment to journal about how this lesson resonates with your personal experience. 
+                            What thoughts or emotions are coming up for you?
+                        </p>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        {% if prev_id %}
+                            <a href="{{ url_for('lessons.show_lesson', course_id=course_id, lesson_id=prev_id) }}" 
+                               class="btn btn-outline-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left me-1" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                                </svg>
+                                Previous Lesson
+                            </a>
+                        {% else %}
+                            <div></div>
+                        {% endif %}
+
+                        {% if next_id %}
+                            <a href="{{ url_for('lessons.show_lesson', course_id=course_id, lesson_id=next_id) }}" 
+                               class="btn btn-primary">
+                                Next Lesson
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right ms-1" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                </svg>
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('lessons.course_complete', course_id=course_id) }}" 
+                               class="btn btn-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle me-1" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                                </svg>
+                                Complete Course
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Virtual Elliott Side Panel -->
+        <div class="col-lg-4">
+            {% include "includes/virtual_elliott.html" %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .lesson-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--text-dark);
+    }
+
+    .lesson-content br {
+        display: block;
+        margin: 0.5rem 0;
+    }
+
+    .reflection-box {
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .progress {
+        border-radius: 10px;
+        background-color: #e9ecef;
+    }
+
+    .progress-bar {
+        border-radius: 10px;
+        transition: width 0.6s ease;
+    }
+
+    @media (max-width: 991px) {
+        .sticky-top {
+            position: relative !important;
+            top: 0 !important;
+            margin-top: 2rem;
+        }
+    }
+
+    /* Button hover effects */
+    .btn {
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(197, 159, 201, 0.3);
+    }
+
+    .btn-outline-secondary:hover {
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}

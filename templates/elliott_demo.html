@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Virtual Elliott Demo - InnerWork{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <!-- Demo Description -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-5">
+                    <h1 class="display-6 fw-bold mb-4">Virtual Elliott Demo</h1>
+                    
+                    <p class="lead mb-4">
+                        Experience AI-powered voice synchronization with our Virtual Elliott assistant prototype.
+                    </p>
+                    
+                    <h4 class="mb-3">What You'll See:</h4>
+                    <ul class="mb-4">
+                        <li class="mb-2">
+                            <strong>Animated Avatar:</strong> Looping video with subtle breathing animation
+                        </li>
+                        <li class="mb-2">
+                            <strong>Three-Part Greeting:</strong> Welcoming sequence designed to calm and center
+                        </li>
+                        <li class="mb-2">
+                            <strong>Synced Subtitles:</strong> Real-time text display matching audio playback
+                        </li>
+                        <li class="mb-2">
+                            <strong>Continuous Loop:</strong> Sequence repeats automatically for demonstration
+                        </li>
+                    </ul>
+                    
+                    <div class="alert alert-info mb-4">
+                        <h6 class="alert-heading">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle me-2" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                            </svg>
+                            Demo Mode
+                        </h6>
+                        <p class="mb-0">
+                            Audio is currently silent (placeholder files). In production, this would use 
+                            high-quality voice synthesis from services like ElevenLabs or D-ID.
+                        </p>
+                    </div>
+                    
+                    <h4 class="mb-3">Technical Features:</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3" style="background: #f8fbfd; border-radius: 8px; border-left: 3px solid #6496c8;">
+                                <h6 class="mb-2">Offline-First</h6>
+                                <small class="text-muted">Works without internet connection</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3" style="background: #f8fbfd; border-radius: 8px; border-left: 3px solid #6496c8;">
+                                <h6 class="mb-2">Graceful Degradation</h6>
+                                <small class="text-muted">Falls back to subtitle-only mode</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3" style="background: #f8fbfd; border-radius: 8px; border-left: 3px solid #6496c8;">
+                                <h6 class="mb-2">Easy Upgrades</h6>
+                                <small class="text-muted">Simple path to AI voice integration</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3" style="background: #f8fbfd; border-radius: 8px; border-left: 3px solid #6496c8;">
+                                <h6 class="mb-2">Reusable Component</h6>
+                                <small class="text-muted">Drop into any page via include</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <h4 class="mb-3">Upgrade Path:</h4>
+                    <p class="text-muted">
+                        This demo uses placeholder media files. To upgrade to production-quality voice:
+                    </p>
+                    <ol class="text-muted mb-4">
+                        <li>Generate voice files with ElevenLabs API (~$5/month)</li>
+                        <li>Replace .wav files with generated .mp3 audio</li>
+                        <li>Optionally upgrade to talking head video with D-ID</li>
+                        <li>Deploy with caching for optimal performance</li>
+                    </ol>
+                    
+                    <div class="d-flex gap-2">
+                        <a href="{{ url_for('modules.dashboard') }}" class="btn btn-outline-secondary">
+                            ← Back to Dashboard
+                        </a>
+                        <a href="{{ url_for('courses.list_courses') }}" class="btn btn-outline-primary">
+                            View Courses
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Virtual Elliott Demo Panel -->
+        <div class="col-lg-5">
+            {% include 'includes/virtual_elliott.html' %}
+            
+            <!-- Additional Info Card -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <h6 class="mb-3">Integration Example</h6>
+                    <p class="small text-muted mb-3">
+                        To add Virtual Elliott to any page, simply include the component:
+                    </p>
+                    <pre class="p-3" style="background: #f5f5f5; border-radius: 8px; font-size: 0.8rem;"><code>{% raw %}{% include 'includes/virtual_elliott.html' %}{% endraw %}</code></pre>
+                    
+                    <p class="small text-muted mb-0 mt-3">
+                        The component is fully self-contained with its own JavaScript and styling.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .alert-info {
+        background: linear-gradient(135deg, #e8f4f8 0%, #f0f7fb 100%);
+        border: 1px solid rgba(100, 150, 200, 0.2);
+        border-left: 4px solid #6496c8;
+    }
+    
+    code {
+        color: #6496c8;
+    }
+</style>
+{% endblock %}

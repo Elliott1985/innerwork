@@ -18,6 +18,7 @@ class User(UserMixin, db.Model):
     progress = db.relationship('Progress', backref='user', lazy=True)
     purchases = db.relationship('Purchase', backref='user', lazy=True)
     chat_history = db.relationship('ChatHistory', backref='user', lazy=True)
+    enrollments = db.relationship('Enrollment', backref='user', lazy=True)
     
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -37,11 +38,14 @@ class Module(db.Model):
     description = db.Column(db.Text)
     video_url = db.Column(db.String(500))
     quiz_questions = db.Column(db.Text)  # JSON string
+    price_cents = db.Column(db.Integer, default=5900)  # Price in cents ($59.00 default)
+    duration_label = db.Column(db.String(50), default="4 Modules")  # e.g. "4 Modules", "6 Lessons"
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationships
     progress = db.relationship('Progress', backref='module', lazy=True)
     purchases = db.relationship('Purchase', backref='module', lazy=True)
+    enrollments = db.relationship('Enrollment', backref='module', lazy=True)
     
     def __repr__(self):
         return f'<Module {self.title}>'
@@ -73,6 +77,20 @@ class Purchase(db.Model):
     
     def __repr__(self):
         return f'<Purchase User:{self.user_id} Module:{self.module_id} Status:{self.payment_status}>'
+
+
+class Enrollment(db.Model):
+    __tablename__ = 'enrollments'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    module_id = db.Column(db.Integer, db.ForeignKey('modules.id'), nullable=False)
+    progress = db.Column(db.Integer, default=0)  # 0-100 percentage
+    status = db.Column(db.String(20), default='in_progress')  # 'in_progress' or 'complete'
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def __repr__(self):
+        return f'<Enrollment User:{self.user_id} Module:{self.module_id} Progress:{self.progress}%>'
 
 
 class ChatHistory(db.Model):

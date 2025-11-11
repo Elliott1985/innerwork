@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="InnerWork - Self-paced therapy and psychoeducation platform by Journeys Edgez Life Coaching">
+    <meta name="theme-color" content="#c59fc9">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="InnerWork">
     <title>{% block title %}InnerWork - Your Journey to Wellness{% endblock %}</title>
     
     <!-- Bootstrap 5 CSS -->
@@ -30,6 +36,9 @@
                 <ul class="navbar-nav ms-auto">
                     {% if current_user.is_authenticated %}
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('courses.list_courses') }}">Courses</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('modules.dashboard') }}">Dashboard</a>
                         </li>
                         <li class="nav-item">
@@ -39,6 +48,9 @@
                             <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
                         </li>
                     {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('courses.list_courses') }}">Courses</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
                         </li>

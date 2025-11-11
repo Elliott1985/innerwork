@@ -1,0 +1,56 @@
+<!-- Virtual Debbie Side Panel Component with Voice Sync -->
+<div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+    <div class="card-body text-center p-4">
+        <h5 class="mb-3" style="color: var(--primary-color);">Virtual Debbie</h5>
+        
+        <!-- Avatar Video Frame -->
+        <div class="avatar-frame position-relative mb-3">
+            <!-- Avatar Display (GIF with video upgrade path) -->
+            <img 
+                id="debbieVideo" 
+                src="{{ url_for('static', filename='media/debbie_avatar.gif') }}" 
+                alt="Virtual Debbie Avatar"
+                width="220" 
+                height="220" 
+                style="border-radius: 12px; object-fit: cover; background: linear-gradient(135deg, #faf8f6 0%, #f0eae6 100%);">
+            <!-- 
+                To upgrade to video:
+                Replace <img> above with:
+                <video id="debbieVideo" autoplay muted loop playsinline width="220" height="220" style="...">
+                    <source src="{{ url_for('static', filename='media/debbie_avatar.mp4') }}" type="video/mp4">
+                </video>
+            -->
+            
+            <!-- Subtitle Display -->
+            <div id="subtitleBox" 
+                 class="mt-2 p-2" 
+                 style="min-height: 50px; font-size: 0.875rem; color: var(--text-muted); transition: opacity 0.3s ease; line-height: 1.4;">
+                Ready to begin...
+            </div>
+        </div>
+        
+        <!-- Description -->
+        <p class="text-muted small mb-3">
+            Your compassionate guide through today's lesson. Click play to hear a greeting.
+        </p>
+        
+        <!-- Play Greeting Button -->
+        <button id="speakBtn" class="btn btn-outline-primary w-100 mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill me-2" viewBox="0 0 16 16">
+                <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+            </svg>
+            Play Greeting
+        </button>
+        <small class="text-muted d-block mb-3">Voice sync demo</small>
+        
+        <hr class="my-3">
+        
+        <!-- Additional Support Link -->
+        <a href="{{ url_for('chatbot.chatbot_page') }}" class="btn btn-sm btn-link text-decoration-none">
+            Open Full Chat Session →
+        </a>
+    </div>
+</div>
+
+<!-- Include Virtual Debbie Voice Sync Script -->
+<script src="{{ url_for('static', filename='js/virtual_debbie.js') }}"></script>

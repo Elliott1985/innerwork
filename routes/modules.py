@@ -1,7 +1,7 @@
 import json
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file
 from flask_login import login_required, current_user
-from models import db, Module, Progress, Purchase
+from models import db, Module, Progress, Purchase, Enrollment
 from datetime import datetime
 from io import BytesIO
 from reportlab.pdfgen import canvas
@@ -12,20 +12,59 @@ modules_bp = Blueprint('modules', __name__)
 @modules_bp.route('/dashboard')
 @login_required
 def dashboard():
-    # Get user's progress
+    # Import hardcoded course data
+    from routes.courses import courses_data
+    
+    # Get user's progress (old system)
     user_progress = Progress.query.filter_by(user_id=current_user.id).all()
     
-    # Get purchased modules
+    # Get purchased modules from old Purchase table
     purchases = Purchase.query.filter_by(
         user_id=current_user.id, 
         payment_status='completed'
     ).all()
-    
     purchased_module_ids = [p.module_id for p in purchases]
-    available_modules = Module.query.filter(Module.id.in_(purchased_module_ids)).all() if purchased_module_ids else []
     
-    # Create progress map
+    # Get enrolled modules from new Enrollment table (Stripe purchases)
+    enrollments = Enrollment.query.filter_by(user_id=current_user.id).all()
+    enrolled_module_ids = [e.module_id for e in enrollments]
+    
+    # Combine both sources
+    all_module_ids = list(set(purchased_module_ids + enrolled_module_ids))
+    
+    # Get modules from database if they exist, otherwise use hardcoded data
+    db_modules = Module.query.filter(Module.id.in_(all_module_ids)).all() if all_module_ids else []
+    
+    # Convert hardcoded courses to module-like objects for enrolled courses
+    available_modules = []
+    if db_modules:
+        available_modules = db_modules
+    else:
+        # Use hardcoded course data for enrolled courses
+        for module_id in all_module_ids:
+            course = next((c for c in courses_data if c['id'] == module_id), None)
+            if course:
+                # Create a simple object with course data
+                class CourseModule:
+                    def __init__(self, course_dict):
+                        self.id = course_dict['id']
+                        self.title = course_dict['title']
+                        self.description = course_dict['description']
+                available_modules.append(CourseModule(course))
+    
+    # Create progress map (prefer new Enrollment progress over old Progress)
     progress_map = {p.module_id: p for p in user_progress}
+    
+    # Add enrollment progress data (convert to match old Progress format for template compatibility)
+    for enrollment in enrollments:
+        if enrollment.module_id not in progress_map:
+            # Create a pseudo-Progress object for template compatibility
+            class EnrollmentProgress:
+                def __init__(self, enrollment):
+                    self.module_id = enrollment.module_id
+                    self.score = enrollment.progress
+                    self.completed_date = enrollment.created_at
+            progress_map[enrollment.module_id] = EnrollmentProgress(enrollment)
     
     return render_template('dashboard.html', 
                          modules=available_modules, 

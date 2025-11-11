@@ -1,60 +1,193 @@
 {% extends "base.html" %}
 
-{% block title %}Virtual Therapist - InnerWork{% endblock %}
+{% block title %}Virtual Debbie - InnerWork{% endblock %}
 
 {% block content %}
 <div class="container py-5">
     <div class="row">
-        <div class="col-lg-8 mx-auto">
-            <h1 class="mb-4">Chat with Virtual Debbie</h1>
-            <p class="text-muted mb-4">Your supportive companion for guidance and encouragement</p>
+        <div class="col-lg-10 col-xl-8 mx-auto">
+            <!-- Header Section -->
+            <div class="text-center mb-4">
+                <div class="chat-header-icon mb-3">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="32" cy="32" r="32" fill="url(#gradient)" opacity="0.2"/>
+                        <path d="M32 16C23.163 16 16 23.163 16 32c0 4.031 1.496 7.709 3.953 10.516L18 48l5.484-1.953C26.291 47.504 29.969 49 34 49c8.837 0 16-7.163 16-16s-7.163-16-16-16z" fill="url(#gradient)"/>
+                        <circle cx="24" cy="30" r="2" fill="white"/>
+                        <circle cx="32" cy="30" r="2" fill="white"/>
+                        <circle cx="40" cy="30" r="2" fill="white"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0" y1="0" x2="64" y2="64">
+                                <stop offset="0%" stop-color="#c59fc9"/>
+                                <stop offset="100%" stop-color="#d4a5a5"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1 class="display-5 mb-3" style="background: linear-gradient(135deg, #c59fc9, #d4a5a5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Virtual Debbie</h1>
+                <p class="lead text-muted">A safe, supportive space for reflection and growth</p>
+                <p class="text-muted small"><em>Debbie Green, MA, PSC &mdash; Journeys Edgez Life Coaching</em></p>
+            </div>
             
-            <div class="card shadow-sm">
+            <!-- Chat Container -->
+            <div class="card shadow-lg border-0" style="border-radius: 20px; overflow: hidden;">
+                <!-- Chat Header Bar -->
+                <div class="chat-header-bar p-3" style="background: linear-gradient(135deg, #c59fc9, #d4a5a5); color: white;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Active Session</strong>
+                            <span class="badge bg-light text-dark ms-2" id="messageCount">0 messages</span>
+                        </div>
+                        <button class="btn btn-sm btn-light" id="clearSessionBtn" title="Start fresh conversation">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                            </svg>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                
                 <div class="card-body p-0">
                     <!-- Chat History Container -->
-                    <div id="chatHistory" class="chat-history p-4" style="height: 500px; overflow-y: auto;">
+                    <div id="chatHistory" class="chat-history p-4" style="height: 550px; overflow-y: auto; background: linear-gradient(to bottom, #fafafa 0%, #f8f5f2 100%);">
                         {% if chat_history %}
                             {% for chat in chat_history %}
-                            <div class="message user-message mb-3">
+                            <div class="message user-message mb-3 animate-fade-in">
                                 <div class="message-bubble user">
-                                    <strong>You:</strong> {{ chat.message }}
+                                    {{ chat.message }}
                                 </div>
-                                <small class="text-muted">{{ chat.timestamp.strftime('%I:%M %p') }}</small>
+                                <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">{{ chat.timestamp.strftime('%I:%M %p') }}</small>
                             </div>
-                            <div class="message bot-message mb-3">
-                                <div class="message-bubble bot">
-                                    <strong>Virtual Debbie:</strong> {{ chat.response }}
+                            <div class="message bot-message mb-4 animate-fade-in">
+                                <div class="d-flex align-items-start">
+                                    <div class="bot-avatar me-2" style="width: 36px; height: 36px; background: linear-gradient(135deg, #c59fc9, #d4a5a5); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.9rem; flex-shrink: 0;">D</div>
+                                    <div class="message-bubble bot" style="flex-grow: 1;">
+                                        {{ chat.response }}
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
                         {% else %}
-                        <div class="text-center text-muted py-5">
-                            <p>Start a conversation with Virtual Debbie</p>
-                            <p class="small">Share what's on your mind...</p>
+                        <div class="text-center text-muted py-5" id="welcomeMessage">
+                            <div class="mb-4">
+                                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="40" cy="40" r="40" fill="#f8f5f2"/>
+                                    <path d="M40 20c-11.046 0-20 8.954-20 20 0 5.039 1.87 9.636 4.941 13.145L22 62l8.855-2.941C34.364 61.13 38.961 63 44 63c11.046 0 20-8.954 20-20s-8.954-20-20-20z" fill="url(#welcomeGradient)"/>
+                                    <circle cx="32" cy="38" r="2.5" fill="white"/>
+                                    <circle cx="40" cy="38" r="2.5" fill="white"/>
+                                    <circle cx="48" cy="38" r="2.5" fill="white"/>
+                                    <path d="M32 48c0-4 3.5-7 8-7s8 3 8 7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                    <defs>
+                                        <linearGradient id="welcomeGradient" x1="0" y1="0" x2="80" y2="80">
+                                            <stop offset="0%" stop-color="#c59fc9"/>
+                                            <stop offset="100%" stop-color="#d4a5a5"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <h5 class="mb-3" style="color: #c59fc9;">Welcome to Your Safe Space</h5>
+                            <p class="mb-2">I'm Debbie &mdash; here to listen, support, and guide you.</p>
+                            <p class="small text-muted">Share what's on your mind. There's no judgment here, only compassion.</p>
                         </div>
                         {% endif %}
                     </div>
                     
                     <!-- Chat Input -->
-                    <div class="chat-input p-3 border-top">
-                        <form id="chatForm" class="d-flex gap-2">
-                            <input type="text" 
-                                   id="messageInput" 
-                                   class="form-control" 
-                                   placeholder="Type your message here..."
-                                   required>
-                            <button type="submit" class="btn btn-primary">Send</button>
+                    <div class="chat-input p-4 border-top" style="background-color: white;">
+                        <form id="chatForm">
+                            <div class="input-group" style="border-radius: 25px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                                <input type="text" 
+                                       id="messageInput" 
+                                       class="form-control border-0" 
+                                       placeholder="Share your thoughts..."
+                                       style="padding: 1rem 1.5rem; font-size: 0.95rem;"
+                                       required>
+                                <button type="submit" class="btn btn-primary border-0" style="padding: 0 2rem; background: linear-gradient(135deg, #c59fc9, #d4a5a5);">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </form>
+                        <div class="mt-2 small text-muted text-center">
+                            Press Enter to send &middot; Your conversation is private and secure
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <div class="alert alert-info mt-3">
-                <strong>Note:</strong> Virtual Debbie is an AI companion. For urgent concerns, please contact a licensed professional.
+            <!-- Safety Notice -->
+            <div class="alert alert-light border-0 mt-4 shadow-sm" style="background-color: #fff9f5; border-left: 4px solid #d4a5a5 !important;">
+                <div class="d-flex align-items-start">
+                    <svg width="24" height="24" fill="#d4a5a5" viewBox="0 0 16 16" class="me-3 flex-shrink-0" style="margin-top: 2px;">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 4zM8 10a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                    </svg>
+                    <div>
+                        <strong style="color: #d4a5a5;">Important Reminder</strong>
+                        <p class="mb-0 small text-muted mt-1">Virtual Debbie is an AI-powered supportive companion, not a replacement for professional mental health care. If you're experiencing a crisis or having thoughts of self-harm, please contact a crisis helpline immediately: <strong>988 Suicide & Crisis Lifeline</strong> or <strong>911</strong>.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+/* Smooth animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Enhanced message bubbles */
+.message-bubble.user {
+    background: linear-gradient(135deg, #c59fc9, #d4a5a5);
+    color: white;
+    box-shadow: 0 2px 8px rgba(197, 159, 201, 0.3);
+}
+
+.message-bubble.bot {
+    background-color: white;
+    color: #3a3a3a;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Scrollbar styling */
+.chat-history::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-history::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.chat-history::-webkit-scrollbar-thumb {
+    background: #c59fc9;
+    border-radius: 10px;
+}
+
+.chat-history::-webkit-scrollbar-thumb:hover {
+    background: #b88db8;
+}
+
+/* Focus states */
+#messageInput:focus {
+    outline: none;
+    box-shadow: none !important;
+}
+
+/* Hover effect for clear button */
+#clearSessionBtn:hover {
+    background-color: rgba(255,255,255,0.9);
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
+</style>
 {% endblock %}
 
 {% block extra_js %}

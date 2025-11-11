@@ -1,0 +1,74 @@
+<!-- Virtual Elliott Demo Component -->
+<div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+    <div class="card-body text-center p-4">
+        <h5 class="mb-3" style="color: var(--primary-color);">Virtual Elliott</h5>
+        
+        <!-- Avatar Video Frame -->
+        <div class="avatar-frame position-relative mb-3">
+            <!-- Avatar Video Player -->
+            <video 
+                id="elliottVideo" 
+                autoplay 
+                muted 
+                loop 
+                playsinline 
+                width="220" 
+                height="220" 
+                style="border-radius: 12px; object-fit: cover; background: linear-gradient(135deg, #e8f4f8 0%, #d4e8f0 100%);">
+                <source src="{{ url_for('static', filename='media/virtualelliott.mp4') }}" type="video/mp4">
+                <!-- Fallback for browsers that don't support video -->
+                Your browser doesn't support video. Please use a modern browser.
+            </video>
+            
+            <!-- Subtitle Display -->
+            <div id="elliottSubtitleBox" 
+                 class="mt-2 p-2" 
+                 style="min-height: 50px; font-size: 0.875rem; color: var(--text-muted); transition: opacity 0.3s ease; line-height: 1.4;">
+                Ready to begin.
+            </div>
+        </div>
+        
+        <!-- Description -->
+        <p class="text-muted small mb-3">
+            Your AI guide demonstrating voice synchronization. Click play to hear a calming greeting.
+        </p>
+        
+        <!-- Play Voice Demo Button -->
+        <button id="playVoiceBtn" class="btn btn-outline-primary w-100 mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill me-2" viewBox="0 0 16 16">
+                <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+            </svg>
+            Play Voice Demo
+        </button>
+        <small class="text-muted d-block mb-3">Three-part greeting sequence</small>
+        
+        <hr class="my-3">
+        
+        <!-- Tech Info -->
+        <div class="text-start">
+            <small class="text-muted d-block mb-1">
+                <strong>Demo Features:</strong>
+            </small>
+            <small class="text-muted d-block">• Synced subtitles</small>
+            <small class="text-muted d-block">• Looping avatar video</small>
+            <small class="text-muted d-block">• Multi-line audio sequence</small>
+        </div>
+    </div>
+</div>
+
+<!-- Include Virtual Elliott Voice Sync Script -->
+<script src="{{ url_for('static', filename='js/virtual_elliott.js') }}"></script>
+
+<style>
+    /* Elliott-specific styling (blue tones instead of lavender/rose) */
+    #elliottVideo {
+        border: 2px solid rgba(100, 150, 200, 0.2);
+        box-shadow: 0 4px 12px rgba(100, 150, 200, 0.15);
+    }
+    
+    #elliottSubtitleBox {
+        background: linear-gradient(135deg, #f8fbfd 0%, #f0f7fb 100%);
+        border-radius: 8px;
+        border-left: 3px solid #6496c8;
+    }
+</style>

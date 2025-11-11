@@ -1,0 +1,15 @@
+flask_session/
+*.pyc
+__pycache__/
+venv/
+env/
+.env
+.env.local
+db/
+*.db
+*.sqlite
+*.sqlite3
+.DS_Store
+.pytest_cache/
+.coverage
+htmlcov/

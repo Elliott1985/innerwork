@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Your Dashboard</h2>
+
+  {% if progress|length == 0 %}
+    <div class="alert alert-info text-center">
+      No purchased modules yet. Visit the <a href="{{ url_for('courses.courses_index') }}">Course Library</a> to get started.
+    </div>
+  {% else %}
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="card border-0 shadow-sm p-4">
+          <h5 class="mb-3">Purchased Modules</h5>
+          {% for e, m in progress %}
+            <div class="mb-3">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <b>{{ m.title }}</b>
+                  <span class="badge {% if e.status == 'complete' %}bg-success{% else %}bg-secondary{% endif %} ms-2">
+                    {{ e.status }}
+                  </span>
+                </div>
+                <small>{{ e.progress }}%</small>
+              </div>
+              <div class="progress" style="height: 10px;">
+                <div class="progress-bar bg-success" style="width: {{ e.progress }}%;"></div>
+              </div>
+              <div class="mt-2 d-flex gap-2">
+                <a class="btn btn-outline-primary btn-sm" href="{{ url_for('lessons.lesson_view', course_id=m.id, lesson_num=1) }}">Continue</a>
+                <!-- Demo: quick progress bumps -->
+                <button class="btn btn-outline-secondary btn-sm" onclick="bump({{ m.id }}, {{ e.progress + 10 }})">+10%</button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="bump({{ m.id }}, 100)">Mark Complete</button>
+              </div>
+              <hr>
+            </div>
+          {% endfor %}
+          <a href="{{ url_for('booking.book') }}" class="btn btn-primary mt-2">Schedule a 1:1 Session</a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+async function bump(moduleId, newPercent){
+  const res = await fetch(`{{ url_for('dashboard.update_progress', module_id=0, new_percent=0) }}`.replace('/0/0', `/${moduleId}/${newPercent}`), { 
+    method: 'POST' 
+  });
+  if (res.ok) location.reload();
+}
+</script>
+{% endblock %}
