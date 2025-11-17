@@ -45,8 +45,18 @@ python app.py
 
 Then open: http://127.0.0.1:5000
 
-## 📸 Screenshots (Optional)  
-Add images of your login page, dashboard, or module screens here.
+## 📸 Screenshots  
+**Landing Page**  
+![InnerWork Home](static/screenshots/innerwork_home.png)
+
+**Dashboard**  
+![InnerWork Dashboard](static/screenshots/innerwork_dashboard.png)
+
+**Self-Paced Programs**  
+![InnerWork Programs](static/screenshots/innerwork_programs.png)
+
+**Virtual Debbie (Chat Interface)**  
+![InnerWork Virtual Debbie](static/screenshots/innerwork_virtual_debbie.png)
 
 ## 👨‍💻 My Contributions  
 I built this project end-to-end, including:  
